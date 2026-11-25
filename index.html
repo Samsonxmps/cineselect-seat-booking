@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Ensures the page scales correctly on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineSelect – Seat Booking</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== PAGE WRAPPER ===== -->
+  <div class="page-wrapper">
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <h1 class="site-title">CineSelect</h1>
+      <p class="site-subtitle">Reserve your perfect seat</p>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+      <!-- ===== LEFT COLUMN : Theatre ===== -->
+      <section class="theatre-section" aria-label="Seat selection area">
+
+        <!-- SCREEN -->
+        <div class="screen-wrapper" aria-hidden="true">
+          <div class="screen-glow">SCREEN THIS WAY</div>
+          <div class="screen-perspective"></div>
+        </div>
+
+        <!-- SEAT LEGEND -->
+        <div class="legend" role="list" aria-label="Seat status legend">
+          <div class="legend-item" role="listitem">
+            <span class="legend-swatch available" aria-hidden="true"></span>
+            <span>Available</span>
+          </div>
+          <div class="legend-item" role="listitem">
+            <span class="legend-swatch selected" aria-hidden="true"></span>
+            <span>Selected</span>
+          </div>
+          <div class="legend-item" role="listitem">
+            <span class="legend-swatch booked" aria-hidden="true"></span>
+            <span>Booked</span>
+          </div>
+        </div>
+
+        <!-- ROW LABELS + SEAT GRID -->
+        <!--
+          The seat grid is generated dynamically by script.js.
+          Each row is a <div class="seat-row"> containing:
+            • a row-label <span>
+            • 8 <button> elements (seats 1-4, then a gap, then seats 5-8)
+        -->
+        <div class="seat-container" id="seatContainer" role="group" aria-label="Cinema seats">
+          <!-- Seats injected here by script.js -->
+        </div>
+
+        <!-- COLUMN NUMBERS (decorative) -->
+        <div class="col-numbers" aria-hidden="true">
+          <!-- Empty cell aligns with the row-label column (A–F) -->
+          <span></span>
+          <span>1</span><span>2</span><span>3</span><span>4</span>
+          <span class="col-gap"></span>
+          <span>5</span><span>6</span><span>7</span><span>8</span>
+        </div>
+
+      </section>
+
+      <!-- ===== RIGHT COLUMN : Booking Summary ===== -->
+      <aside class="summary-card" aria-label="Booking summary">
+        <h2 class="summary-title">Booking Summary</h2>
+
+        <div class="summary-row">
+          <span class="summary-label">Selected Seats</span>
+          <!-- Updated live by script.js -->
+          <span class="summary-value" id="selectedSeats">None</span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">Total Seats</span>
+          <span class="summary-value" id="seatCount">0</span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">Price / Seat</span>
+          <span class="summary-value">₹250</span>
+        </div>
+
+        <div class="summary-row summary-total">
+          <span class="summary-label">Total Price</span>
+          <span class="summary-value" id="totalPrice">₹0</span>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="btn-group">
+          <button class="btn btn-reset" id="resetBtn" title="Deselect all chosen seats">
+            Reset Selection
+          </button>
+          <button class="btn btn-confirm" id="confirmBtn" title="Confirm and book selected seats">
+            Confirm Booking
+          </button>
+        </div>
+
+        <!-- Confirmation / Error message shown after action -->
+        <div class="confirmation-msg" id="confirmationMsg" role="alert" aria-live="polite"></div>
+      </aside>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <p>© 2026 CineSelect &nbsp;|&nbsp; College Web Programming &amp; UI Design Project</p>
+    </footer>
+
+  </div><!-- .page-wrapper -->
+
+  <!-- JavaScript loaded at the bottom so the DOM is ready -->
+  <script src="script.js"></script>
+</body>
+</html>

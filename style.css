@@ -1,0 +1,596 @@
+/* ==========================================================================
+   style.css  –  Cinema Seat Selection  (Light Minimal Theme)
+   Inspired by: BookMyShow / Apple / Stripe design language
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CSS CUSTOM PROPERTIES
+   -------------------------------------------------------------------------- */
+:root {
+  /* ── Backgrounds ── */
+  --bg-page:        #F8F9FA;   /* soft warm off-white */
+  --bg-surface:     #FFFFFF;   /* cards, seat map, summary */
+  --bg-row:         #FFFFFF;
+
+  /* ── Brand / Action ── */
+  --green:          #16A34A;   /* emerald – selected seat, confirm btn */
+  --green-light:    #F0FDF4;   /* hover tint on available seats */
+  --green-mid:      #DCFCE7;   /* very light fill used in legend swatch */
+
+  /* ── Booked / Error ── */
+  --red-bg:         #FEF2F2;
+  --red-border:     #FECACA;
+  --red-text:       #B91C1C;
+
+  /* ── Neutrals ── */
+  --border:         #E5E7EB;   /* default hairline border */
+  --border-seat:    #CBD5E1;   /* available seat border (slate-300) */
+  --text-heading:   #111827;   /* dark charcoal */
+  --text-body:      #374151;   /* readable body */
+  --text-muted:     #6B7280;   /* secondary labels */
+  --text-xmuted:    #9CA3AF;   /* screen label, col numbers */
+
+  /* ── Shadows (very soft elevation) ── */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+
+  /* ── Typography ── */
+  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  /* ── Sizing ── */
+  --seat-size: 42px;
+  --gap-seat:  8px;
+
+  /* ── Radii ── */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* ── Transitions ── */
+  --ease: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET & BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background-color: var(--bg-page);
+  color: var(--text-body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   3. PAGE WRAPPER
+   -------------------------------------------------------------------------- */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --------------------------------------------------------------------------
+   4. HEADER
+   -------------------------------------------------------------------------- */
+.site-header {
+  text-align: center;
+  padding: 40px 16px 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 36px;
+}
+
+.site-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-heading);
+}
+
+/* Decorative dot accent after the title */
+.site-title::after {
+  content: '.';
+  color: var(--green);
+}
+
+.site-subtitle {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   5. MAIN LAYOUT
+   -------------------------------------------------------------------------- */
+.main-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+  padding-bottom: 48px;
+  flex: 1;
+}
+
+.theatre-section {
+  flex: 1 1 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  /* White card container for the seat map */
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px 24px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;   /* clips any sub-pixel seat grid overhang */
+}
+
+/* --------------------------------------------------------------------------
+   6. SCREEN INDICATOR  (minimal, no glow)
+   -------------------------------------------------------------------------- */
+.screen-wrapper {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+/* Uppercase tracked label */
+.screen-glow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-xmuted);
+  text-transform: uppercase;
+  /* NO text-shadow, NO neon glow */
+}
+
+/* Thin curved light-gray bar representing the screen */
+.screen-perspective {
+  width: 80%;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    transparent  0%,
+    #D1D5DB     20%,
+    #D1D5DB     80%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  /* NO blur, NO box-shadow glow */
+}
+
+/* --------------------------------------------------------------------------
+   7. LEGEND
+   -------------------------------------------------------------------------- */
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.legend-swatch.available {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-seat);
+}
+
+.legend-swatch.selected {
+  background: var(--green);
+  border: 1.5px solid var(--green);
+}
+
+.legend-swatch.booked {
+  background: var(--red-bg);
+  border: 1.5px solid var(--red-border);
+}
+
+/* --------------------------------------------------------------------------
+   8. SEAT CONTAINER
+   -------------------------------------------------------------------------- */
+.seat-container {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;   /* safety net: clips any sub-pixel grid overhang */
+}
+
+/* --------------------------------------------------------------------------
+   9. SEAT ROW
+   -------------------------------------------------------------------------- */
+.seat-row {
+  display: grid;
+  grid-template-columns: 32px repeat(4, var(--seat-size)) 16px repeat(4, var(--seat-size));
+  gap: var(--gap-seat);
+  align-items: center;
+  padding: 4px 0;
+  /* No dark background strip — white surface from parent card */
+  border-radius: var(--radius-xs);
+}
+
+/* Hover tint on the whole row for orientation aid */
+.seat-row:hover {
+  background: #FAFAFA;
+}
+
+.row-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-xmuted);
+  text-align: center;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.aisle-gap {
+  display: block;
+  width: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   10. SEAT BUTTON
+   -------------------------------------------------------------------------- */
+.seat {
+  width: var(--seat-size);
+  height: var(--seat-size);
+  border-radius: var(--radius-xs);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background   var(--ease),
+    border-color var(--ease),
+    color        var(--ease),
+    transform    var(--ease),
+    box-shadow   var(--ease);
+  user-select: none;
+  position: relative;
+  outline-offset: 3px;
+}
+
+/* ── STATE : Available ── */
+.seat.available {
+  background: var(--bg-surface);
+  color: var(--text-body);
+  border: 1.5px solid var(--border-seat);
+  box-shadow: var(--shadow-xs);
+}
+
+.seat.available:hover {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: var(--green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.seat.available:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+/* ── STATE : Selected ── */
+.seat.selected {
+  background: var(--green);
+  color: #FFFFFF;
+  border: 1.5px solid var(--green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+}
+
+.seat.selected:hover {
+  background: #15803d;    /* green-700 — slightly darker on hover */
+  border-color: #15803d;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
+}
+
+/* ── STATE : Booked (disabled) ── */
+.seat.booked,
+.seat:disabled {
+  background: var(--red-bg);
+  color: var(--red-text);
+  border: 1.5px solid var(--red-border);
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.85;
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   11. COLUMN NUMBERS
+   -------------------------------------------------------------------------- */
+.col-numbers {
+  display: grid;
+  grid-template-columns: 32px repeat(4, var(--seat-size)) 16px repeat(4, var(--seat-size));
+  gap: var(--gap-seat);
+  width: 100%;
+  max-width: 520px;
+}
+
+.col-numbers span {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text-xmuted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.col-numbers .col-gap { display: block; }
+
+/* --------------------------------------------------------------------------
+   12. BOOKING SUMMARY CARD
+   -------------------------------------------------------------------------- */
+.summary-card {
+  flex: 0 0 272px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.summary-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.2px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.875rem;
+}
+
+.summary-label {
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.summary-value {
+  font-weight: 600;
+  color: var(--text-heading);
+  text-align: right;
+  word-break: break-word;
+  max-width: 155px;
+}
+
+/* Total row — slightly more prominent */
+.summary-total {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 2px;
+}
+
+.summary-total .summary-label {
+  color: var(--text-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.summary-total .summary-value {
+  color: var(--green);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  /* NO text-shadow glow */
+}
+
+/* --------------------------------------------------------------------------
+   13. ACTION BUTTONS
+   -------------------------------------------------------------------------- */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition:
+    background   var(--ease),
+    color        var(--ease),
+    border-color var(--ease),
+    transform    var(--ease),
+    box-shadow   var(--ease);
+  font-family: var(--font);
+}
+
+/* Reset — ghost/outline style */
+.btn-reset {
+  background: var(--bg-surface);
+  color: var(--text-body);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn-reset:hover {
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+  color: var(--text-heading);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Confirm — solid dark Apple-style */
+.btn-confirm {
+  background: var(--text-heading);  /* #111827 charcoal */
+  color: #FFFFFF;
+  border: 1px solid var(--text-heading);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-confirm:hover {
+  background: #1F2937;
+  border-color: #1F2937;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-confirm:active,
+.btn-reset:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+/* --------------------------------------------------------------------------
+   14. CONFIRMATION MESSAGE
+   -------------------------------------------------------------------------- */
+.confirmation-msg {
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
+  display: none;
+  white-space: pre-line;  /* preserve newlines from JS */
+}
+
+.confirmation-msg.show {
+  display: block;
+  animation: fadeUp 0.22s ease forwards;
+}
+
+.confirmation-msg.success {
+  background: #F0FDF4;
+  color: #15803d;
+  border: 1px solid #BBF7D0;
+}
+
+.confirmation-msg.error {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------------------------------------------------------
+   15. FOOTER
+   -------------------------------------------------------------------------- */
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.75rem;
+  color: var(--text-xmuted);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  letter-spacing: 0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   16. RESPONSIVE  (≤ 700 px — stack layout, slightly smaller seats)
+   -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  :root {
+    --seat-size: 36px;
+    --gap-seat:  6px;
+  }
+
+  .main-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .theatre-section {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: 20px 14px;
+  }
+
+  .summary-card {
+    flex: 1 1 auto;
+    width: 100%;
+    position: static;
+  }
+}
+
+/* ≤ 420 px — tightest fit (375 px phones) */
+@media (max-width: 420px) {
+  :root {
+    --seat-size: 27px;   /* 24 + 8×27 + 10 + 9×4 = 286px — fits the ~298px row box */
+    --gap-seat:  4px;
+  }
+
+  .seat {
+    font-size: 0.5rem;
+  }
+
+  /* Explicit column template matches the calculated 286px grid width */
+  .seat-row {
+    grid-template-columns: 24px repeat(4, 27px) 10px repeat(4, 27px);
+    padding: 3px 0;
+  }
+
+  .col-numbers {
+    grid-template-columns: 24px repeat(4, 27px) 10px repeat(4, 27px);
+  }
+
+  .theatre-section {
+    padding: 14px 8px;
+  }
+}
